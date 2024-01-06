@@ -48,6 +48,7 @@ struct PersistenceController {
         if context.hasChanges {
             do {
                 try context.save()
+                print("Data saved")
             } catch {
                 // Show some error here
                 print("Error saving context: \(error)")            }

@@ -1,10 +1,3 @@
-//
-//  LoginViewModel.swift
-//  Mail
-//
-//  Created by Nathan Lee on 4/1/2024.
-//
-
 import CoreData
 import SwiftUI
 
@@ -15,29 +8,35 @@ struct CoreDatabase {
         self.managedObjectContext = context
     }
 
-    func read(entity: String, attribute: String) -> String? {
+    func read<T>(entity: String, attribute: String, completion: @escaping (T?) -> Void) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity)
         do {
             let result = try managedObjectContext.fetch(fetchRequest)
             for data in result as! [NSManagedObject] {
-                if let attributeValue = data.value(forKey: attribute) as? String {
-                    return attributeValue
+                if let attributeValue = data.value(forKey: attribute) as? T {
+                    completion(attributeValue)
+                    return
                 }
             }
         } catch {
-            print("Failed to fetch data")
+            print("Failed to fetch data: \(error)")
         }
-        return nil
+        completion(nil)
     }
 
-    func write(entity: String, attribute: String, value: Any) {
+    
+    func write(entity: String, attribute: String, value: Any, completion: @escaping (Bool) -> Void) {
         let entity = NSEntityDescription.entity(forEntityName: entity, in: managedObjectContext)
         let newRecord = NSManagedObject(entity: entity!, insertInto: managedObjectContext)
         newRecord.setValue(value, forKey: attribute)
         do {
             try managedObjectContext.save()
+            completion(true)
         } catch {
             print("Failed to save data")
+            completion(false)
         }
     }
+    
+
 }

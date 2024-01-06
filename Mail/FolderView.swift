@@ -1,5 +1,5 @@
 //
-//  MessageListView.swift
+//  FolderView.swift
 //  Mail
 //
 //  Created by Nathan Lee on 31/12/2023.
@@ -7,148 +7,107 @@
 
 import SwiftUI
 import MailCore
+import SwiftUIIntrospect
 
-struct MessageListView: View {
+struct FolderView: View {
     @EnvironmentObject var sessionInfo: SessionInfo
-
     var body: some View {
         NavigationStack {
-            VStack {
-                ScrollView(.vertical) {
-                    LazyVStack(spacing: 2) {
-                        if sessionInfo.messages.isEmpty {
-                            Spacer()
-                            Text("Loading...")
-                                .font(.system(size: 25))
-                        } else {
-                            ForEach(sessionInfo.messages, id: \.uid) { message in
-                                Button(action: {
-                                    // Handle button tap for the specific message
-                                    print("Button tapped for message with subject: \(message.header.subject ?? "")")
-                                }) {
-                                    ZStack {
-                                        RoundedRectangle(cornerRadius: 25)
-                                            .foregroundStyle(.thinMaterial)
-                                        // Contents
-                                        VStack {
-                                            HStack {
-                                                Text("\(message.header.from?.displayName ?? "No Sender")")
-                                                    .font(.headline)
+            ZStack {
+                VStack {
+                    ScrollView(.vertical) {
+                        LazyVStack(spacing: 7) {
+                            if sessionInfo.messages.isEmpty {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .scaleEffect(1.5)
+                                    .padding()
+                            } else {
+                                ForEach(sessionInfo.messages, id: \.uid) { message in
+                                    NavigationLink {
+                                        MessageView(selectedMessage: message)
+                                            .environmentObject(sessionInfo)
+                                            .toolbarRole(.editor)
+                                    } label: {
+                                        ZStack {
+                                            if !message.flags.contains(.seen) {
+                                                RoundedRectangle(cornerRadius: 15)
+                                                    .opacity(0.2)
+                                                    .tint(.blue)
+                                                RoundedRectangle(cornerRadius: 15)
+                                                    .foregroundStyle(.thinMaterial)
+                                            } else {
+                                                RoundedRectangle(cornerRadius: 15)
+                                                    .foregroundStyle(.thinMaterial)
+                                            }
+                                            // Contents
+                                            VStack {
+                                                HStack {
+                                                    Text("\(message.header.from?.displayName ?? "No Sender")")
+                                                        .font(.headline)
+                                                        .lineLimit(1)
+                                                        .foregroundStyle(Color.primary)
+                                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                                    Spacer()
+                                                    let messageDate = message.header?.date
+                                                    Text(formattedDate(for: messageDate ?? Date()))
+                                                        .lineLimit(1)
+                                                        .foregroundStyle(Color(.systemGray2))
+                                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                                }
+                                                Text(message.header.subject ?? "No Subject")
+                                                    .font(.subheadline)
                                                     .lineLimit(1)
                                                     .foregroundStyle(Color.primary)
                                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                                Spacer()
-                                                let messageDate = message.header?.date
-                                                Text(formattedDate(for: messageDate ?? Date()))
-                                                    .lineLimit(1)
-                                                    .foregroundStyle(Color(.systemGray2))
-                                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                                            }
-                                            Text(message.header.subject ?? "No Subject")
-                                                .font(.subheadline)
-                                                .lineLimit(1)
-                                                .foregroundStyle(Color.primary)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
 
 
-                                            // Assuming message is an instance of MCOIMAPMessage
-                                            if let htmlContent = message.htmlRendering(withFolder: "INBOX", delegate: nil) {
-                                                // Extract plain text from HTML content (you may want to use a library like SwiftSoup for more sophisticated HTML parsing)
-                                                let plainText = htmlContent // Replace this with your HTML to plain text conversion logic
-                                                let preview = String(plainText)
-                                                Text(preview)
-                                                    .lineLimit(2)
-                                                    .foregroundStyle(Color(.systemGray2))
-                                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                            } else {
-                                                Text("No preview available\n")
-                                                    .lineLimit(2)
-                                                    .foregroundStyle(Color(.systemGray2))
-                                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                            }
+                                                // Assuming message is an instance of MCOIMAPMessage
+                                                if let htmlContent = message.htmlRendering(withFolder: "INBOX", delegate: nil) {
+                                                    let plainText = htmlContent // Replace this with your HTML to plain text conversion logic
+                                                    let preview = String(plainText)
+                                                    Text(preview)
+                                                        .lineLimit(2)
+                                                        .foregroundStyle(Color(.systemGray2))
+                                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                                } else {
+                                                    Text("Lorem ipsum dolor sit amet, consectetur adip iscing elit. Pellentesque lobortis eros et eleifend laoreet. Nunc rhoncus accumsan rhoncus.")
+                                                        .lineLimit(2)
+                                                        .foregroundStyle(Color(.systemGray2))
+                                                        .multilineTextAlignment(.leading)
+                                                        //.frame(maxWidth: .infinity, alignment: .trailing)
+                                                }
+                                                    
                                                 
-                                            
+                                            }
+                                            .padding(11)
                                         }
-                                        .padding(10)
                                     }
                                 }
-                                .padding(.bottom, 9)
                             }
                         }
+                        .padding(.horizontal, 15)
+                        
+                        
                     }
-                    .padding(.horizontal, 12)
-                    
+                    .background(UIKitView())
                 }
+                .navigationBarTitle("Inbox")
             }
-            .navigationBarTitle("Inbox")
+            
         }
     }
 }
 
 
-func startSession() -> MCOIMAPSession {
-    print("start session")
-    
-    let session = MCOIMAPSession()
-    session.isVoIPEnabled = false
-        
-    session.hostname       = "imap.gmail.com"
-    session.port           = 993
-    session.connectionType = .TLS
-    session.username       = "nahtanlee@gmail.com"
-    session.password       = "hrll hurc ikmb xwhl"
-    
-    if let op = session.checkAccountOperation() {
-        op.start { err in
-            if let err = err {
-                print("IMAP Connect Error: \(err)")
-            } else {
-                print("Successful IMAP connection")
-            }
-        }
-    }
-    return session
-}
-
-
-
-
-func searchMessages(session: MCOIMAPSession, since: Date, unreadOnly: Bool, completion: @escaping ([MCOIMAPMessage]) -> Void) {
-    var search = MCOIMAPSearchExpression.search(sinceReceivedDate: since)
-    
-    if unreadOnly {
-        search = MCOIMAPSearchExpression.searchAnd(search, other: MCOIMAPSearchExpression.searchUnread())
+struct UIKitView: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
     }
 
-    if let op = session.searchExpressionOperation(withFolder: "INBOX", expression: search) {
-        op.start { error, messageIds in
-            if let err = error {
-                print("Error searching IMAP: \(err)")
-                return
-            }
-      
-            if let messageIds = messageIds {
-                if let messageOp = session.fetchMessagesOperation(withFolder: "INBOX", requestKind: [ .flags, .fullHeaders, .internalDate, .size, .structure], uids: messageIds) {
-          
-                    // if you would like to fetch some non-standard headers
-                    messageOp.extraHeaders = [ "Delivered-To" ]
-
-                    messageOp.start { error, messages, _ in
-                        if let error = error {
-                            print("Error fetching messages: \(error)")
-                            return
-                        }
-
-                        if let messages = messages {
-                            print("Retrieved \(messages.count) message(s) from IMAP server:")
-                            print("Messages: \(messages.debugDescription)")
-                            completion(messages.reversed())
-                        }
-                    }
-                }
-            }
-        }
-    }
+    func updateUIView(_ uiView: UIViewType, context: Context) {}
 }
 
 
@@ -187,8 +146,3 @@ func formattedDate(for date: Date) -> String {
 
 
 
-/*
-#Preview {
-    MessageListView()
-}
-*/

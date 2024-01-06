@@ -6,12 +6,21 @@
 //
 
 import SwiftUI
+import CoreData
 
 @main
 struct MailApp: App {
+    let persistenceController = PersistenceController.shared
+    @Environment(\.scenePhase) var scenePhase
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .preferredColorScheme(.dark)
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+        }
+        .onChange(of: scenePhase, initial: false) {
+            persistenceController.save()
         }
     }
 }
