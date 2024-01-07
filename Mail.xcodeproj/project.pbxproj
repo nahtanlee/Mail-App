@@ -10,16 +10,14 @@
 		3E27AF0A2B3F8A6000BBB642 /* MailApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E27AF092B3F8A6000BBB642 /* MailApp.swift */; };
 		3E27AF0C2B3F8A6000BBB642 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E27AF0B2B3F8A6000BBB642 /* ContentView.swift */; };
 		3E27AF0E2B3F8A6200BBB642 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E27AF0D2B3F8A6200BBB642 /* Assets.xcassets */; };
-		3E27AF122B3F8A6200BBB642 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E27AF112B3F8A6200BBB642 /* Preview Assets.xcassets */; };
 		3E27AF292B3FA36C00BBB642 /* MailCore2 in Frameworks */ = {isa = PBXBuildFile; productRef = 3E27AF282B3FA36C00BBB642 /* MailCore2 */; };
 		3E61E9152B43EF520054630A /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E61E9142B43EF520054630A /* MessageView.swift */; };
 		3E61E9172B43FB920054630A /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E61E9162B43FB920054630A /* MenuView.swift */; };
-		3E65872F2B46599700F0317B /* CoreDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E65872E2B46599700F0317B /* CoreDatabase.swift */; };
+		3E65872F2B46599700F0317B /* CoreDataFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E65872E2B46599700F0317B /* CoreDataFunctions.swift */; };
 		3E6587502B4812E500F0317B /* MailCoreFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E65874F2B4812E500F0317B /* MailCoreFunctions.swift */; };
 		3EB08B962B44BDE100B0361E /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB08B952B44BDE100B0361E /* SetupView.swift */; };
 		3EB08B982B44EAA500B0361E /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB08B972B44EAA500B0361E /* CameraView.swift */; };
 		3ED75EFD2B40D0210059AF75 /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED75EFC2B40D0210059AF75 /* FolderView.swift */; };
-		3EF694DA2B45587F00AD1E43 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = 3EF694D92B45587F00AD1E43 /* SwiftUIIntrospect */; };
 		3EF694DD2B456DCA00AD1E43 /* Data.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3EF694DB2B456DCA00AD1E43 /* Data.xcdatamodeld */; };
 		3EF694DF2B456EA600AD1E43 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF694DE2B456EA600AD1E43 /* PersistenceController.swift */; };
 /* End PBXBuildFile section */
@@ -45,10 +43,9 @@
 		3E27AF0B2B3F8A6000BBB642 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3E27AF0D2B3F8A6200BBB642 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3E27AF0F2B3F8A6200BBB642 /* Mail.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mail.entitlements; sourceTree = "<group>"; };
-		3E27AF112B3F8A6200BBB642 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3E61E9142B43EF520054630A /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		3E61E9162B43FB920054630A /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
-		3E65872E2B46599700F0317B /* CoreDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDatabase.swift; sourceTree = "<group>"; };
+		3E65872E2B46599700F0317B /* CoreDataFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFunctions.swift; sourceTree = "<group>"; };
 		3E65874F2B4812E500F0317B /* MailCoreFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailCoreFunctions.swift; sourceTree = "<group>"; };
 		3EB08B952B44BDE100B0361E /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
 		3EB08B972B44EAA500B0361E /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
@@ -63,13 +60,35 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E27AF292B3FA36C00BBB642 /* MailCore2 in Frameworks */,
-				3EF694DA2B45587F00AD1E43 /* SwiftUIIntrospect in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3E0EC9DE2B4A6ECE00BBA129 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3E27AF0B2B3F8A6000BBB642 /* ContentView.swift */,
+				3EB08B952B44BDE100B0361E /* SetupView.swift */,
+				3E61E9162B43FB920054630A /* MenuView.swift */,
+				3ED75EFC2B40D0210059AF75 /* FolderView.swift */,
+				3EB08B972B44EAA500B0361E /* CameraView.swift */,
+				3E61E9142B43EF520054630A /* MessageView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3E0EC9DF2B4A6F7200BBA129 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				3E27AF092B3F8A6000BBB642 /* MailApp.swift */,
+				3E27AF0D2B3F8A6200BBB642 /* Assets.xcassets */,
+				3E27AF0F2B3F8A6200BBB642 /* Mail.entitlements */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
 		3E27AEFD2B3F8A6000BBB642 = {
 			isa = PBXGroup;
 			children = (
@@ -89,38 +108,22 @@
 		3E27AF082B3F8A6000BBB642 /* Mail */ = {
 			isa = PBXGroup;
 			children = (
-				3E27AF092B3F8A6000BBB642 /* MailApp.swift */,
-				3E27AF0B2B3F8A6000BBB642 /* ContentView.swift */,
-				3E65872D2B46597600F0317B /* Core Data */,
-				3EB08B952B44BDE100B0361E /* SetupView.swift */,
-				3E61E9162B43FB920054630A /* MenuView.swift */,
-				3ED75EFC2B40D0210059AF75 /* FolderView.swift */,
-				3EB08B972B44EAA500B0361E /* CameraView.swift */,
-				3E61E9142B43EF520054630A /* MessageView.swift */,
-				3E27AF0D2B3F8A6200BBB642 /* Assets.xcassets */,
-				3E27AF0F2B3F8A6200BBB642 /* Mail.entitlements */,
-				3E27AF102B3F8A6200BBB642 /* Preview Content */,
+				3E0EC9DF2B4A6F7200BBA129 /* Other */,
+				3E65872D2B46597600F0317B /* Functions */,
+				3E0EC9DE2B4A6ECE00BBA129 /* Views */,
 			);
 			path = Mail;
 			sourceTree = "<group>";
 		};
-		3E27AF102B3F8A6200BBB642 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				3E27AF112B3F8A6200BBB642 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		3E65872D2B46597600F0317B /* Core Data */ = {
+		3E65872D2B46597600F0317B /* Functions */ = {
 			isa = PBXGroup;
 			children = (
 				3EF694DE2B456EA600AD1E43 /* PersistenceController.swift */,
-				3E65872E2B46599700F0317B /* CoreDatabase.swift */,
+				3E65872E2B46599700F0317B /* CoreDataFunctions.swift */,
 				3E65874F2B4812E500F0317B /* MailCoreFunctions.swift */,
 				3EF694DB2B456DCA00AD1E43 /* Data.xcdatamodeld */,
 			);
-			path = "Core Data";
+			path = Functions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,7 +145,6 @@
 			name = Mail;
 			packageProductDependencies = (
 				3E27AF282B3FA36C00BBB642 /* MailCore2 */,
-				3EF694D92B45587F00AD1E43 /* SwiftUIIntrospect */,
 			);
 			productName = Mail;
 			productReference = 3E27AF062B3F8A6000BBB642 /* Mail.app */;
@@ -174,7 +176,6 @@
 			mainGroup = 3E27AEFD2B3F8A6000BBB642;
 			packageReferences = (
 				3E27AF272B3FA36C00BBB642 /* XCRemoteSwiftPackageReference "mailcore2" */,
-				3EF694D82B45587F00AD1E43 /* XCRemoteSwiftPackageReference "swiftui-introspect" */,
 			);
 			productRefGroup = 3E27AF072B3F8A6000BBB642 /* Products */;
 			projectDirPath = "";
@@ -190,7 +191,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E27AF122B3F8A6200BBB642 /* Preview Assets.xcassets in Resources */,
 				3E27AF0E2B3F8A6200BBB642 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -211,7 +211,7 @@
 				3E27AF0C2B3F8A6000BBB642 /* ContentView.swift in Sources */,
 				3ED75EFD2B40D0210059AF75 /* FolderView.swift in Sources */,
 				3EB08B962B44BDE100B0361E /* SetupView.swift in Sources */,
-				3E65872F2B46599700F0317B /* CoreDatabase.swift in Sources */,
+				3E65872F2B46599700F0317B /* CoreDataFunctions.swift in Sources */,
 				3E27AF0A2B3F8A6000BBB642 /* MailApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,6 +271,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -326,6 +327,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -446,14 +448,6 @@
 				kind = branch;
 			};
 		};
-		3EF694D82B45587F00AD1E43 /* XCRemoteSwiftPackageReference "swiftui-introspect" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/siteline/swiftui-introspect.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -461,11 +455,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3E27AF272B3FA36C00BBB642 /* XCRemoteSwiftPackageReference "mailcore2" */;
 			productName = MailCore2;
-		};
-		3EF694D92B45587F00AD1E43 /* SwiftUIIntrospect */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3EF694D82B45587F00AD1E43 /* XCRemoteSwiftPackageReference "swiftui-introspect" */;
-			productName = SwiftUIIntrospect;
 		};
 /* End XCSwiftPackageProductDependency section */
 

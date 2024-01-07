@@ -7,7 +7,6 @@
 
 import SwiftUI
 import MailCore
-import SwiftUIIntrospect
 
 struct FolderView: View {
     @EnvironmentObject var sessionInfo: SessionInfo

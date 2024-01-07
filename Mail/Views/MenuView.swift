@@ -7,8 +7,6 @@
 
 import SwiftUI
 import MailCore
-import SwiftUIIntrospect
-
 struct MenuView: View {
     @EnvironmentObject var sessionInfo: SessionInfo
     @Environment(\.managedObjectContext) var managedObjectContext
