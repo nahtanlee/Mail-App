@@ -7,6 +7,11 @@
 
 import SwiftUI
 import MailCore
+
+let FolderIcons: [String: String] = [
+    "Inbox" : "tray"
+]
+
 struct MenuView: View {
     @EnvironmentObject var sessionInfo: SessionInfo
     @Environment(\.managedObjectContext) var managedObjectContext
@@ -14,32 +19,26 @@ struct MenuView: View {
 
     var body: some View {
         let database = CoreDatabase(context: managedObjectContext)
-        NavigationStack {
-            ZStack {
+            VStack {
+                Text("Mail")
+                    .font(.largeTitle)
                 
-                List {
-                    NavigationLink(destination: FolderView().environmentObject(sessionInfo)) {
-                        Image(systemName: "tray")
-                            .imageScale(.large)
-                            .foregroundStyle(.blue)
-                        Text("Inbox")
+                LazyVStack {
+                    ForEach(sessionInfo.folderList, id: \.path) { folder in
+                        Button(action: {
+                            print("Folder pressed: \(folder.path)")
+                        }, label: {
+                            RoundedRectangle(cornerRadius: 25)
+                                .foregroundStyle(Color.white.opacity(0))
+                            Text("\(folder.path)")
+                        })
+                        
                     }
-                    
 
                 }
-                .navigationTitle("Mail")
+                .padding(11)
             }
-        }
-        
-        .onAppear {
-            sessionInfo.session = startSession(database: database)
-            sessionInfo.date = Date(timeIntervalSinceNow: -7 * 24 * 60 * 60)
-            searchMessages(session: sessionInfo.session ?? MCOIMAPSession(), since: sessionInfo.date, unreadOnly: false) { updatedMessages in
-                sessionInfo.updateMessages(updatedMessages)
-                print(sessionInfo.messages.count)
-            }
-            searchFolders(session: sessionInfo.session ?? MCOIMAPSession())
-        }
+            .padding(.horizontal, 15)
         
     }
 }

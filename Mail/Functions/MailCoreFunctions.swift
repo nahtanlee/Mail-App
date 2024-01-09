@@ -49,7 +49,7 @@ func checkSession(database: CoreDatabase, completion: @escaping (Bool) -> Void) 
 }
 
 
-func startSession(database: CoreDatabase) -> MCOIMAPSession {
+func startSession(database: CoreDatabase, completion: @escaping (MCOIMAPSession) -> Void) {
     //@Environment(\.managedObjectContext) var managedObjectContext
     
     
@@ -61,12 +61,10 @@ func startSession(database: CoreDatabase) -> MCOIMAPSession {
     
     database.read(entity: "Login", attribute: "email") { email in
         session.username = email
-        print(email)
     }
     
     database.read(entity: "Login", attribute: "password") { password in
         session.password = password
-        print(password)
     }
     
         
@@ -83,10 +81,10 @@ func startSession(database: CoreDatabase) -> MCOIMAPSession {
                 print("IMAP Connect Error: \(err)")
             } else {
                 print("Successful IMAP connection")
+                completion(session)
             }
         }
     }
-    return session
 }
 
 
@@ -131,7 +129,7 @@ func searchMessages(session: MCOIMAPSession, since: Date, unreadOnly: Bool, comp
 }
 
 
-func searchFolders(session: MCOIMAPSession /*, completion: @escaping ([MCOIMAPFolder]) -> Void*/) {
+func searchFolders(session: MCOIMAPSession, completion: @escaping ([MCOIMAPFolder]) -> Void) {
     if let op = session.fetchAllFoldersOperation() {
         op.start { error, folderList in
             
@@ -141,9 +139,26 @@ func searchFolders(session: MCOIMAPSession /*, completion: @escaping ([MCOIMAPFo
             }
             
             if let folders = folderList {
-                print("Listed all IMAP Folders: \(folders.debugDescription)")
-                // completion(folders)
+                print("Searched \(folders.count) IMAP Folders: \(folders.debugDescription)")
+                completion(folders)
             }
         }
     }
+}
+
+
+func sessionReload(sessionInfo: SessionInfo, database: CoreDatabase, completion: @escaping (Bool) -> Void) {
+    startSession(database: database) { session in
+        sessionInfo.session = session
+        searchFolders(session: sessionInfo.session!) { folders in
+            sessionInfo.folderList = folders
+            searchMessages(session: sessionInfo.session!, since: sessionInfo.date, unreadOnly: false) { updatedMessages in
+                sessionInfo.updateMessages(updatedMessages)
+                print(sessionInfo.messages.count)
+                completion(true)
+            }
+
+        }
+    }
+
 }

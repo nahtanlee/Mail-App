@@ -16,7 +16,7 @@ class SessionInfo: ObservableObject {
     @Published var date = Date(timeIntervalSinceNow: -7 * 24 * 60 * 60)
     @Published var messages: [MCOIMAPMessage] = []
     @Published var selectedMessage: MCOIMAPMessage = MCOIMAPMessage()
-    // @Published var selectedFolder
+    @Published var folderList: [MCOIMAPFolder] = []
     
     // Core Data
     @Published var loginSetup: Bool = false
@@ -29,6 +29,7 @@ class SessionInfo: ObservableObject {
 }
 
 
+
 struct ContentView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @StateObject var sessionInfo = SessionInfo()
@@ -39,8 +40,12 @@ struct ContentView: View {
                 
         ZStack {
             CameraView()
-                .ignoresSafeArea(.keyboard)
-                .blur(radius: 50)
+                .blur(radius: 70)
+                .overlay {
+                    Rectangle()
+                        .ignoresSafeArea(.all)
+                        .foregroundStyle(Color.white.opacity(0.3))
+                }
                 .onAppear() {
                     database.read(entity: "Login", attribute: "setup") { (setup: Bool?) in
                         sessionInfo.loginSetup = setup ?? false

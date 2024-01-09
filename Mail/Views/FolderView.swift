@@ -89,7 +89,6 @@ struct FolderView: View {
                         
                         
                     }
-                    .background(UIKitView())
                 }
                 .navigationBarTitle("Inbox")
             }

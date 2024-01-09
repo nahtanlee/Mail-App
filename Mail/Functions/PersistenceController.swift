@@ -31,12 +31,15 @@ struct PersistenceController {
             }
         }
         
+        //MCOIMAPSession.register()
+        
+        
         let context = container.viewContext
         
+        // Set default values
         let loginEntity = NSEntityDescription.entity(forEntityName: "Login", in: context)!
         let newObject = NSManagedObject(entity: loginEntity, insertInto: context)
-        
-        newObject.setValue(true, forKey: "setup")
+        newObject.setValue(false, forKey: "setup")
         
         save()
         

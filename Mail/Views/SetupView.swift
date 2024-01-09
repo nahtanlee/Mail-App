@@ -23,7 +23,7 @@ struct SetupView: View {
     @State private var passwordHide: Bool = true
     @State private var isLoading: Bool = false
     @State private var buttonScale: Double = 1.0
-    @State private var isLoginDenied: Int = 0
+    @State private var isLoginDenied: Int = 50
     
     @State private var enteredEmail: String = ""
     // = "nahtanlee@gmail.com"
@@ -41,36 +41,34 @@ struct SetupView: View {
             
             // Combine header, page, page dots and next button
             VStack {
-                // Header/Title
-                VStack (spacing: 0) {
-                    Spacer()
-                    HStack (spacing: 0) {
-                        Text("Welcome to Mail")
-                            .font(.system(size: 42, weight: .heavy, design: .rounded))
-                            .foregroundStyle(.primary)
-                            .opacity(0.9)
-                            .shadow(radius: shadowRadius)
-                        VStack (spacing: 0){
-                            Text("*")
-                                .font(.system(size: 30, weight: .heavy))
-                                .foregroundStyle(.primary)
-                                .opacity(0.9)
-                                .shadow(radius: shadowRadius)
-                                .padding(.bottom, 5)
-                            
-                        }
-                    }
-                    
-                    Text("*but better")
-                        .font(.system(size: 30, weight: .semibold, design: .rounded))
-                        .opacity(0.9)
-                        .shadow(radius: shadowRadius)
-                }
                 
                 HStack (spacing: 0) {
                     // Title page (0)
                     if currentPage >= -1 && currentPage <= 1 {
                         VStack (spacing: 0) {
+                            Spacer()
+                            HStack (spacing: 0) {
+                                Text("Welcome to Mail")
+                                    .font(.system(size: 42, weight: .heavy))
+                                    .foregroundStyle(.primary)
+                                    .opacity(0.9)
+                                    .shadow(radius: shadowRadius)
+                                VStack (spacing: 0){
+                                    Text("*")
+                                        .font(.system(size: 30, weight: .heavy))
+                                        .foregroundStyle(.primary)
+                                        .opacity(0.9)
+                                        .shadow(radius: shadowRadius)
+                                        .padding(.bottom, 5)
+                                    
+                                }
+                            }
+                            
+                            Text("*but better")
+                                .font(.system(size: 30, weight: .semibold, design: .rounded))
+                                .opacity(0.9)
+                                .shadow(radius: shadowRadius)
+                            
                             Image("Icon")
                                 .frame(width: 150, height: 150, alignment: .center)
                                 .shadow(radius: shadowRadius)
@@ -92,11 +90,14 @@ struct SetupView: View {
                     if currentPage >= 0 && currentPage <= 2 {
                         VStack {
                             
-                            Text("Login:")
-                                .font(.system(size: 20, weight: .bold))
-                                .frame(width: 310, alignment: .leading)
-                                .foregroundStyle(.secondary.opacity(0.9))
-                                .padding(.top, 100)
+                            Spacer()
+                            Text("Login")
+                                .font(.system(size: 42, weight: .heavy))
+                                .foregroundStyle(.primary)
+                                .opacity(0.9)
+                                .shadow(radius: shadowRadius)
+                            Spacer()
+                            
                             // Login fields
                             VStack (spacing: 4) {
                                 // Email field
@@ -180,9 +181,10 @@ struct SetupView: View {
                                         .clipped()
                                     }
                                 
+                                
                             }
-                            .modifier(Shake(animatableData: CGFloat(isLoginDenied)))
-                            .padding(.bottom, 275)
+                            .modifier(ShakeFields(animatableData: CGFloat(isLoginDenied)))
+                            .padding(.bottom, 200)
                             
                             
                             
@@ -190,6 +192,7 @@ struct SetupView: View {
                         .offset(x: pageOffset + 400)
                     }
                 }
+
                 
                 
                 // Page dots
@@ -212,23 +215,29 @@ struct SetupView: View {
                         } else {
                             nextStep() { success in
                                 if success {
-                                    database.write(entity: "Login", attribute: "setup", value: true, completion: { completion in
+                                    sessionReload(sessionInfo: sessionInfo, database: database, completion: { completion in
                                         if completion {
-                                            print("Setup written to")
+                                            database.write(entity: "Login", attribute: "setup", value: true, completion: { completion in
+                                                if completion {
+                                                    print("Setup complete!")
+                                                    withAnimation(.bouncy) {
+                                                        sessionInfo.loginSetup = true
+                                                    }
+                                                }
+                                            })
                                         }
                                     })
-                                    print("Setup complete")
-                                    withAnimation(.bouncy) {
-                                        sessionInfo.loginSetup = true
-                                    }
                                 } else {
                                     withAnimation(.bouncy) {
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                             print("Login Failed")
                                             isLoading = false
-                                            isLoginDenied += 1
                                             nextPageAllowed = false
                                             nextStepAllowed = false
+                                        }
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                                            print("Shake")
+                                            isLoginDenied += 1
                                         }
                                     }
                                 }
@@ -238,14 +247,10 @@ struct SetupView: View {
                         }
                     } else {
                         if isLoading {
-                            withAnimation(.bouncy) {
-                                buttonScale = 1.4
+                            withAnimation(.easeInOut.repeatForever(autoreverses: true)) {
+                                buttonScale = 2
                             }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                                withAnimation(.bouncy) {
-                                    buttonScale = 1.0
-                                }
-                            }
+                            
                         } else {
                             withAnimation(.default) {
                                 isNextDenied += 1
@@ -255,14 +260,15 @@ struct SetupView: View {
                 }, label: {
                     ZStack {
                         RoundedRectangle(cornerRadius: 50)
-                            .foregroundStyle(nextStepAllowed ? Color.blue : Color.black.opacity(0.1))
+                            .foregroundStyle(nextStepAllowed ? Color.blue : Color.white.opacity(0.1))
                             .frame(width: isLoading ? 35 : 85, height: 35)
                             
                         HStack {
                             if isLoading {
                                 ProgressView()
                                     .progressViewStyle(.circular)
-                                    .scaleEffect(1)
+                                    .scaleEffect(1.1)
+                                    .tint(Color.white)
                             } else {
                                 Text("Next")
                                     .font(.system(size: 17, weight: .bold, design: .rounded))
@@ -272,19 +278,19 @@ struct SetupView: View {
                             }
                         }
                     }
-                    .modifier(Shake(animatableData: CGFloat(isNextDenied)))
+                    .modifier(ShakeButton(animatableData: CGFloat(isNextDenied)))
                 })
                 .scaleEffect(buttonScale)
-                .tint(nextStepAllowed ? .white : .gray)
+                .tint(nextStepAllowed ? .white : .white.opacity(0.9))
                 .padding(.bottom, 25)
                     
                 
                     
             }
+            
 
             
         }
-        .ignoresSafeArea(.keyboard)
         
         
     }
@@ -310,13 +316,11 @@ struct SetupView: View {
             @State var passwordSaved: Bool = false
             database.write(entity: "Login", attribute: "email", value: enteredEmail) { completed in
                 if completed {
-                    print("Email saved")
                     emailSaved = true
                 }
             }
             database.write(entity: "Login", attribute: "password", value: enteredPassword) { completed in
                 if completed {
-                    print("Password saved")
                     passwordSaved = true
                     checkSession(database: database) { completed in
                         if completed {
@@ -336,9 +340,23 @@ struct SetupView: View {
 }
 
 
-// Next button shake effect
-struct Shake: GeometryEffect {
+// Shake effects
+struct ShakeButton: GeometryEffect {
     var amount: CGFloat = 7
+    var shakesPerUnit = 4
+    var animatableData: CGFloat
+    
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+
+        let translation = amount * sin(animatableData * .pi * CGFloat(shakesPerUnit))
+        return ProjectionTransform(CGAffineTransform(translationX: translation, y: 0))
+
+    }
+}
+
+struct ShakeFields: GeometryEffect {
+    var amount: CGFloat = 10
     var shakesPerUnit = 4
     var animatableData: CGFloat
     
@@ -358,6 +376,11 @@ extension Shape {
             .fill(.shadow(.inner(radius: 1, x: 0, y: 1.5)))
             .stroke(LinearGradient(colors: [.black, .white], startPoint: .top, endPoint: .bottom).opacity(0.3), lineWidth: 1)
             .foregroundStyle(.background.opacity(0.2))
+    }
+    
+    func buttonModifier() -> some View {
+        self
+        
     }
 }
 

@@ -14,6 +14,7 @@ struct CoreDatabase {
             let result = try managedObjectContext.fetch(fetchRequest)
             for data in result as! [NSManagedObject] {
                 if let attributeValue = data.value(forKey: attribute) as? T {
+                    print("Successfully read \(attributeValue) at \(entity).\(attribute)")
                     completion(attributeValue)
                     return
                 }
@@ -23,7 +24,6 @@ struct CoreDatabase {
         }
         completion(nil)
     }
-
     
     func write(entity: String, attribute: String, value: Any, completion: @escaping (Bool) -> Void) {
         let entity = NSEntityDescription.entity(forEntityName: entity, in: managedObjectContext)
@@ -31,6 +31,7 @@ struct CoreDatabase {
         newRecord.setValue(value, forKey: attribute)
         do {
             try managedObjectContext.save()
+            print("Successfully wrote \(value) at \(String(describing: entity)).\(attribute)")
             completion(true)
         } catch {
             print("Failed to save data")
@@ -40,3 +41,7 @@ struct CoreDatabase {
     
 
 }
+
+
+
+
