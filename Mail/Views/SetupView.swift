@@ -11,6 +11,7 @@ import CoreData
 struct SetupView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @EnvironmentObject var sessionInfo: SessionInfo
+    @EnvironmentObject private var motion: MotionManager
     
     @State private var isIconTapped: Bool = false
     @State private var isNextTapped: Bool = false
@@ -34,8 +35,6 @@ struct SetupView: View {
     
     var body: some View {
         let database = CoreDatabase(context: managedObjectContext)
-        let shadowRadius: CGFloat = 10
-
         
         ZStack {
             
@@ -52,13 +51,11 @@ struct SetupView: View {
                                     .font(.system(size: 42, weight: .heavy))
                                     .foregroundStyle(.primary)
                                     .opacity(0.9)
-                                    .shadow(radius: shadowRadius)
                                 VStack (spacing: 0){
                                     Text("*")
                                         .font(.system(size: 30, weight: .heavy))
                                         .foregroundStyle(.primary)
                                         .opacity(0.9)
-                                        .shadow(radius: shadowRadius)
                                         .padding(.bottom, 5)
                                     
                                 }
@@ -67,11 +64,11 @@ struct SetupView: View {
                             Text("*but better")
                                 .font(.system(size: 30, weight: .semibold, design: .rounded))
                                 .opacity(0.9)
-                                .shadow(radius: shadowRadius)
                             
                             Image("Icon")
+                                .windowEffectModifier(minWidth: 150, minHeight: 150, cornerRadius: 40, motion: motion)
                                 .frame(width: 150, height: 150, alignment: .center)
-                                .shadow(radius: shadowRadius)
+                                .shadow(radius: 10, x: motion.x * (isIconTapped ? 25 : 10), y: motion.y * (isIconTapped ? 25 : 10))
                                 .offset(x: 0, y: isIconTapped ? 25 : 0)
                                 .padding(.top, 50)
                                 .padding(.bottom, 200)
@@ -95,14 +92,13 @@ struct SetupView: View {
                                 .font(.system(size: 42, weight: .heavy))
                                 .foregroundStyle(.primary)
                                 .opacity(0.9)
-                                .shadow(radius: shadowRadius)
                             Spacer()
                             
                             // Login fields
                             VStack (spacing: 4) {
                                 // Email field
                                 RoundedRectangle(cornerRadius: 25)
-                                    .textFieldModifier()
+                                    .textFieldModifier(motion: motion)
                                     .frame(width: 310, height: 35)
                                     .overlay {
                                         TextField("Email address", text: $enteredEmail) { }
@@ -125,7 +121,7 @@ struct SetupView: View {
                                 
                                 // Password field
                                 RoundedRectangle(cornerRadius: 25)
-                                    .textFieldModifier()
+                                    .textFieldModifier(motion: motion)
                                     .frame(width: 310, height: 35)
                                     .overlay {
                                         HStack (spacing: 0){
@@ -333,56 +329,11 @@ struct SetupView: View {
                     }
                 }
             }
-            
-            // validate login
         }
     }
 }
 
 
-// Shake effects
-struct ShakeButton: GeometryEffect {
-    var amount: CGFloat = 7
-    var shakesPerUnit = 4
-    var animatableData: CGFloat
-    
-
-    func effectValue(size: CGSize) -> ProjectionTransform {
-
-        let translation = amount * sin(animatableData * .pi * CGFloat(shakesPerUnit))
-        return ProjectionTransform(CGAffineTransform(translationX: translation, y: 0))
-
-    }
-}
-
-struct ShakeFields: GeometryEffect {
-    var amount: CGFloat = 10
-    var shakesPerUnit = 4
-    var animatableData: CGFloat
-    
-
-    func effectValue(size: CGSize) -> ProjectionTransform {
-
-        let translation = amount * sin(animatableData * .pi * CGFloat(shakesPerUnit))
-        return ProjectionTransform(CGAffineTransform(translationX: translation, y: 0))
-
-    }
-}
-
-
-extension Shape {
-    func textFieldModifier() -> some View {
-        self
-            .fill(.shadow(.inner(radius: 1, x: 0, y: 1.5)))
-            .stroke(LinearGradient(colors: [.black, .white], startPoint: .top, endPoint: .bottom).opacity(0.3), lineWidth: 1)
-            .foregroundStyle(.background.opacity(0.2))
-    }
-    
-    func buttonModifier() -> some View {
-        self
-        
-    }
-}
 
 func validateEmail(_ email: String) -> Bool {
     let regex = try! NSRegularExpression(pattern: "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$", options: [.caseInsensitive])

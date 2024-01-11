@@ -11,6 +11,8 @@
 		3E27AF0C2B3F8A6000BBB642 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E27AF0B2B3F8A6000BBB642 /* ContentView.swift */; };
 		3E27AF0E2B3F8A6200BBB642 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E27AF0D2B3F8A6200BBB642 /* Assets.xcassets */; };
 		3E27AF292B3FA36C00BBB642 /* MailCore2 in Frameworks */ = {isa = PBXBuildFile; productRef = 3E27AF282B3FA36C00BBB642 /* MailCore2 */; };
+		3E347D502B4F854C00924649 /* DesignAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E347D4F2B4F854C00924649 /* DesignAssets.swift */; };
+		3E347D522B4F979300924649 /* GaussianBlurShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3E347D512B4F979300924649 /* GaussianBlurShader.metal */; };
 		3E61E9152B43EF520054630A /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E61E9142B43EF520054630A /* MessageView.swift */; };
 		3E61E9172B43FB920054630A /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E61E9162B43FB920054630A /* MenuView.swift */; };
 		3E65872F2B46599700F0317B /* CoreDataFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E65872E2B46599700F0317B /* CoreDataFunctions.swift */; };
@@ -43,6 +45,8 @@
 		3E27AF0B2B3F8A6000BBB642 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3E27AF0D2B3F8A6200BBB642 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3E27AF0F2B3F8A6200BBB642 /* Mail.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mail.entitlements; sourceTree = "<group>"; };
+		3E347D4F2B4F854C00924649 /* DesignAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignAssets.swift; sourceTree = "<group>"; };
+		3E347D512B4F979300924649 /* GaussianBlurShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = GaussianBlurShader.metal; sourceTree = "<group>"; };
 		3E61E9142B43EF520054630A /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		3E61E9162B43FB920054630A /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		3E65872E2B46599700F0317B /* CoreDataFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFunctions.swift; sourceTree = "<group>"; };
@@ -121,7 +125,9 @@
 				3EF694DE2B456EA600AD1E43 /* PersistenceController.swift */,
 				3E65872E2B46599700F0317B /* CoreDataFunctions.swift */,
 				3E65874F2B4812E500F0317B /* MailCoreFunctions.swift */,
+				3E347D4F2B4F854C00924649 /* DesignAssets.swift */,
 				3EF694DB2B456DCA00AD1E43 /* Data.xcdatamodeld */,
+				3E347D512B4F979300924649 /* GaussianBlurShader.metal */,
 			);
 			path = Functions;
 			sourceTree = "<group>";
@@ -208,10 +214,12 @@
 				3E61E9152B43EF520054630A /* MessageView.swift in Sources */,
 				3EF694DD2B456DCA00AD1E43 /* Data.xcdatamodeld in Sources */,
 				3E6587502B4812E500F0317B /* MailCoreFunctions.swift in Sources */,
+				3E347D502B4F854C00924649 /* DesignAssets.swift in Sources */,
 				3E27AF0C2B3F8A6000BBB642 /* ContentView.swift in Sources */,
 				3ED75EFD2B40D0210059AF75 /* FolderView.swift in Sources */,
 				3EB08B962B44BDE100B0361E /* SetupView.swift in Sources */,
 				3E65872F2B46599700F0317B /* CoreDataFunctions.swift in Sources */,
+				3E347D522B4F979300924649 /* GaussianBlurShader.metal in Sources */,
 				3E27AF0A2B3F8A6000BBB642 /* MailApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -358,8 +366,7 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -402,8 +409,7 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";

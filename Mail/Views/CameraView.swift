@@ -22,8 +22,6 @@ struct CameraView: UIViewControllerRepresentable {
         }
     }
 
-    var didCapturePhoto: ((UIImage) -> Void)?
-
     func makeCoordinator() -> Coordinator {
         return Coordinator(parent: self)
     }
@@ -83,6 +81,7 @@ struct CameraView: UIViewControllerRepresentable {
         return viewController
     }
 
+
     func configureCaptureDevice(_ device: AVCaptureDevice) {
         do {
             try device.lockForConfiguration()
@@ -102,7 +101,6 @@ struct CameraView: UIViewControllerRepresentable {
             // Handle configuration error
         }
     }
-
 
     func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<CameraView>) {
         // Update UI if needed
